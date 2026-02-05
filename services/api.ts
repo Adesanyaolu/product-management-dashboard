@@ -1,43 +1,34 @@
 import { Category, Product } from "@/types";
-import { mockCategories, mockProducts } from "./mockData";
 
-// Simulate API delay
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
+
+// Generic fetch helper for the API
+async function fetchFromApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const response = await fetch(`${BASE_URL}${endpoint}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    ...options,
+  });
+
+  if (!response.ok) {
+    throw new Error(`API Error: ${response.statusText}`);
+  }
+
+  return response.json();
+}
 
 export const api = {
-  async getProducts(params?: {
-    search?: string;
-    category?: string;
-  }): Promise<Product[]> {
-    await delay(500); // Simulate network delay
-
-    let products = [...mockProducts];
-
-    // Filter by search
-    if (params?.search) {
-      const searchLower = params.search.toLowerCase();
-      products = products.filter(
-        (p) =>
-          p.name.toLowerCase().includes(searchLower) ||
-          p.description.toLowerCase().includes(searchLower)
-      );
-    }
-
-    // Filter by category
-    if (params?.category && params.category !== "all") {
-      products = products.filter((p) => p.category === params.category);
-    }
-
-    return products;
+  // Use real API
+  async getProductsFromApi(): Promise<Product[]> {
+    return fetchFromApi<Product[]>("products");
   },
 
-  async getProduct(id: string): Promise<Product | null> {
-    await delay(300);
-    return mockProducts.find((p) => p.id === id) || null;
+  async getProductFromApi(id: string): Promise<Product> {
+    return fetchFromApi<Product>(`products/${id}`);
   },
 
-  async getCategories(): Promise<Category[]> {
-    await delay(200);
-    return mockCategories;
+  async getCategoriesFromApi(): Promise<Category[]> {
+    return fetchFromApi<Category[]>("categories");
   },
 };

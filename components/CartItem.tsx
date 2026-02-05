@@ -12,12 +12,12 @@ export function CartItem({ item }: CartItemProps) {
   const { updateQuantity, removeItem } = useCart();
   const { product, quantity } = item;
 
-  const handleIncrement = () => updateQuantity(product.id, quantity + 1);
+  const handleIncrement = () => updateQuantity(product.sku, quantity + 1);
   const handleDecrement = () => {
     if (quantity > 1) {
-      updateQuantity(product.id, quantity - 1);
+      updateQuantity(product.sku, quantity - 1);
     } else {
-      removeItem(product.id);
+      removeItem(product.sku);
     }
   };
 
@@ -43,7 +43,7 @@ export function CartItem({ item }: CartItemProps) {
 
       <View className="items-end justify-between">
         <Pressable
-          onPress={() => removeItem(product.id)}
+          onPress={() => removeItem(product.sku)}
           className="p-1"
         >
           <Trash2 size={18} color="#ef4444" />

@@ -3,7 +3,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { SearchBar } from "@/components/SearchBar";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useCategories, useProducts } from "@/hooks/useProducts";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, RefreshControl, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -14,10 +14,31 @@ export default function HomeScreen() {
   const debouncedSearch = useDebounce(searchQuery, 300);
 
   const { data: categories } = useCategories();
-  const { data: products, isLoading, error, refetch } = useProducts(
-    debouncedSearch,
-    selectedCategory
-  );
+  const { data: products, isLoading, error, refetch } = useProducts();
+
+  // Client-side filtering
+  const filteredProducts = useMemo(() => {
+    if (!products) return [];
+
+    let filtered = [...products];
+
+    // Filter by search
+    if (debouncedSearch) {
+      const searchLower = debouncedSearch.toLowerCase();
+      filtered = filtered.filter(
+        (p) =>
+          p.name.toLowerCase().includes(searchLower) ||
+          p.description?.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Filter by category
+    if (selectedCategory && selectedCategory !== "all") {
+      filtered = filtered.filter((p) => p.category === selectedCategory);
+    }
+
+    return filtered;
+  }, [products, debouncedSearch, selectedCategory]);
 
   const categoryNames = categories?.map((c) => c.name) || [];
 
@@ -65,11 +86,11 @@ export default function HomeScreen() {
           <View className="flex-1 items-center justify-center">
             <ActivityIndicator size="large" color="#000" />
           </View>
-        ) : products && products.length > 0 ? (
+        ) : filteredProducts && filteredProducts.length > 0 ? (
           <FlatList
-            data={products}
+            data={filteredProducts}
             renderItem={({ item }) => <ProductCard product={item} />}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.sku}
             numColumns={2}
             contentContainerStyle={{ paddingBottom: 20 }}
             refreshControl={

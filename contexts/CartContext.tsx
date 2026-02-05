@@ -5,10 +5,10 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 interface CartContextType {
   items: CartItem[];
   addItem: (product: Product, quantity: number) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
-  removeItem: (productId: string) => void;
+  updateQuantity: (productSku: string, quantity: number) => void;
+  removeItem: (productSku: string) => void;
   clearCart: () => void;
-  getItemQuantity: (productId: string) => number;
+  getItemQuantity: (productSku: string) => number;
   subtotal: number;
   tax: number;
   total: number;
@@ -41,13 +41,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addItem = (product: Product, quantity: number) => {
     setItems((currentItems) => {
       const existingItem = currentItems.find(
-        (item) => item.product.id === product.id
+        (item) => item.product.sku === product.sku
       );
 
       if (existingItem) {
         // Update quantity if item already exists
         return currentItems.map((item) =>
-          item.product.id === product.id
+          item.product.sku === product.sku
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
@@ -58,22 +58,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (productSku: string, quantity: number) => {
     if (quantity <= 0) {
-      removeItem(productId);
+      removeItem(productSku);
       return;
     }
 
     setItems((currentItems) =>
       currentItems.map((item) =>
-        item.product.id === productId ? { ...item, quantity } : item
+        item.product.sku === productSku ? { ...item, quantity } : item
       )
     );
   };
 
-  const removeItem = (productId: string) => {
+  const removeItem = (productSku: string) => {
     setItems((currentItems) =>
-      currentItems.filter((item) => item.product.id !== productId)
+      currentItems.filter((item) => item.product.sku !== productSku)
     );
   };
 
@@ -81,8 +81,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems([]);
   };
 
-  const getItemQuantity = (productId: string): number => {
-    const item = items.find((item) => item.product.id === productId);
+  const getItemQuantity = (productSku: string): number => {
+    const item = items.find((item) => item.product.sku === productSku);
     return item?.quantity || 0;
   };
 

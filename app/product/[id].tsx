@@ -11,18 +11,26 @@ import {
   Image,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const styles = StyleSheet.create({
+  productImage: {
+    width: '100%',
+    height: 384,
+  },
+});
+
 export default function ProductDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const { data: product, isLoading, error } = useProduct(id);
+  const { id: sku } = useLocalSearchParams<{ id: string }>();
+  const { data: product, isLoading, error } = useProduct(sku);
   const { addItem, getItemQuantity } = useCart();
   const [quantity, setQuantity] = useState(1);
 
-  const currentCartQuantity = product ? getItemQuantity(product.id) : 0;
+  const currentCartQuantity = product ? getItemQuantity(product.sku) : 0;
 
   const handleAddToCart = () => {
     if (product) {
@@ -71,7 +79,7 @@ export default function ProductDetailScreen() {
         <View className="relative">
           <Image
             source={{ uri: product.image }}
-            className="w-full h-96"
+            style={styles.productImage}
             resizeMode="cover"
           />
           <View className="absolute top-4 left-4 flex-row gap-2">

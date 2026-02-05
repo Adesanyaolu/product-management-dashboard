@@ -10,7 +10,7 @@ export const mockCategories: Category[] = [
 
 export const mockProducts: Product[] = [
   {
-    id: "1",
+    sku: "product-1",
     name: "Wireless Headphones",
     description: "Premium noise-cancelling wireless headphones with 30-hour battery life",
     price: 199.99,
@@ -22,7 +22,7 @@ export const mockProducts: Product[] = [
     onSale: false,
   },
   {
-    id: "2",
+    sku: "product-2",
     name: "Smart Watch",
     description: "Fitness tracker with heart rate monitor and GPS",
     price: 299.99,
@@ -34,7 +34,7 @@ export const mockProducts: Product[] = [
     onSale: true,
   },
   {
-    id: "3",
+    sku: "product-3",
     name: "Cotton T-Shirt",
     description: "Comfortable 100% organic cotton t-shirt",
     price: 29.99,
@@ -46,7 +46,7 @@ export const mockProducts: Product[] = [
     onSale: false,
   },
   {
-    id: "4",
+    sku: "product-4",
     name: "Running Shoes",
     description: "Lightweight running shoes with advanced cushioning",
     price: 129.99,
@@ -58,7 +58,7 @@ export const mockProducts: Product[] = [
     onSale: false,
   },
   {
-    id: "5",
+    sku: "product-5",
     name: "Coffee Maker",
     description: "Programmable coffee maker with thermal carafe",
     price: 89.99,
@@ -70,7 +70,7 @@ export const mockProducts: Product[] = [
     onSale: true,
   },
   {
-    id: "6",
+    sku: "product-6",
     name: "Yoga Mat",
     description: "Non-slip eco-friendly yoga mat with carrying strap",
     price: 39.99,
@@ -82,7 +82,7 @@ export const mockProducts: Product[] = [
     onSale: false,
   },
   {
-    id: "7",
+    sku: "product-7",
     name: "Bluetooth Speaker",
     description: "Portable waterproof speaker with 12-hour battery",
     price: 79.99,
@@ -94,7 +94,7 @@ export const mockProducts: Product[] = [
     onSale: false,
   },
   {
-    id: "8",
+    sku: "product-8",
     name: "Denim Jeans",
     description: "Classic fit denim jeans with stretch comfort",
     price: 69.99,
@@ -106,7 +106,7 @@ export const mockProducts: Product[] = [
     onSale: true,
   },
   {
-    id: "9",
+    sku: "product-9",
     name: "Cookbook Collection",
     description: "Set of 3 bestselling cookbooks for home chefs",
     price: 49.99,
@@ -118,7 +118,7 @@ export const mockProducts: Product[] = [
     onSale: false,
   },
   {
-    id: "10",
+    sku: "product-10",
     name: "Backpack",
     description: "Durable laptop backpack with USB charging port",
     price: 59.99,
@@ -130,7 +130,7 @@ export const mockProducts: Product[] = [
     onSale: false,
   },
   {
-    id: "11",
+    sku: "product-11",
     name: "Blender",
     description: "High-speed blender for smoothies and soups",
     price: 119.99,
@@ -142,7 +142,7 @@ export const mockProducts: Product[] = [
     onSale: true,
   },
   {
-    id: "12",
+    sku: "product-12",
     name: "Sunglasses",
     description: "UV protection polarized sunglasses",
     price: 89.99,
@@ -154,7 +154,7 @@ export const mockProducts: Product[] = [
     onSale: false,
   },
   {
-    id: "13",
+    sku: "product-13",
     name: "Gaming Mouse",
     description: "RGB gaming mouse with programmable buttons",
     price: 49.99,
@@ -166,7 +166,7 @@ export const mockProducts: Product[] = [
     onSale: false,
   },
   {
-    id: "14",
+    sku: "product-14",
     name: "Cutting Board Set",
     description: "Bamboo cutting board set with juice groove",
     price: 34.99,
@@ -178,7 +178,7 @@ export const mockProducts: Product[] = [
     onSale: false,
   },
   {
-    id: "15",
+    sku: "product-15",
     name: "Winter Jacket",
     description: "Insulated waterproof winter jacket",
     price: 159.99,

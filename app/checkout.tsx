@@ -107,7 +107,7 @@ export default function CheckoutScreen() {
                 Order Summary
               </Text>
               {items.map((item) => (
-                <View key={item.product.id} className="flex-row justify-between mb-2">
+                <View key={item.product.sku} className="flex-row justify-between mb-2">
                   <Text className="text-sm text-muted-foreground flex-1" numberOfLines={1}>
                     {item.product.name} x{item.quantity}
                   </Text>

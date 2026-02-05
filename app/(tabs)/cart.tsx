@@ -59,7 +59,7 @@ export default function CartScreen() {
         {/* Cart Items */}
         <ScrollView className="flex-1 px-4">
           {items.map((item) => (
-            <CartItem key={item.product.id} item={item} />
+            <CartItem key={item.product.sku} item={item} />
           ))}
         </ScrollView>
 

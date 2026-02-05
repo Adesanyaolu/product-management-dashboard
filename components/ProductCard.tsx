@@ -29,7 +29,7 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   const handlePress = () => {
-    router.push(`/product/${product.id}`);
+    router.push(`/product/${product.sku}`);
   };
 
   return (
