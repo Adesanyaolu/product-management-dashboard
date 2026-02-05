@@ -7,14 +7,14 @@ import { router, useLocalSearchParams } from "expo-router";
 import { Minus, Plus, ShoppingCart, X } from "lucide-react-native";
 import React, { useState } from "react";
 import {
-    ActivityIndicator,
-    Image,
-    Pressable,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    View,
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProductDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

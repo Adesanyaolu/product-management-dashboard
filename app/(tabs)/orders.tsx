@@ -4,7 +4,8 @@ import { Order } from "@/types";
 import { storage } from "@/utils/storage";
 import { Package } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function OrdersScreen() {
   const [orders, setOrders] = useState<Order[]>([]);

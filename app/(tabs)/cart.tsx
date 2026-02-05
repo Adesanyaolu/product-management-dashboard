@@ -6,11 +6,11 @@ import { router } from "expo-router";
 import { ShoppingBag } from "lucide-react-native";
 import React from "react";
 import {
-    SafeAreaView,
-    ScrollView,
-    Text,
-    View
+  ScrollView,
+  Text,
+  View
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CartScreen() {
   const { items, subtotal, tax, total, clearCart } = useCart();

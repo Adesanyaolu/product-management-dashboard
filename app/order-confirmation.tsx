@@ -6,7 +6,8 @@ import { storage } from "@/utils/storage";
 import { router, useLocalSearchParams } from "expo-router";
 import { CheckCircle } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, Text, View } from "react-native";
+import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function OrderConfirmationScreen() {
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
@@ -33,7 +34,7 @@ export default function OrderConfirmationScreen() {
     );
   }
 
-  const estimatedDate = new Date(order.estimatedDelivery).toLocaleDateString("en-US", {
+  const estimatedDate = new Date(order.estimatedDelivery || "").toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
     day: "numeric",

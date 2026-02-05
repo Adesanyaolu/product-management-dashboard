@@ -12,13 +12,13 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-    ActivityIndicator,
-    Pressable,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    View,
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CheckoutScreen() {
   const { items, total, subtotal, tax, clearCart } = useCart();
@@ -48,9 +48,6 @@ export default function CheckoutScreen() {
   const onSubmit = async (data: CheckoutFormData) => {
     setIsSubmitting(true);
 
-    // Simulate payment processing
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
     // Create order
     const order: Order = {
       id: `ORD-${Date.now()}`,
@@ -76,7 +73,7 @@ export default function CheckoutScreen() {
       estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
     };
 
-    // Save order
+    // Save order to storage
     await storage.saveOrder(order);
 
     // Clear cart
@@ -84,10 +81,14 @@ export default function CheckoutScreen() {
 
     setIsSubmitting(false);
 
-    // Navigate to confirmation
-    router.replace({
-      pathname: "/order-confirmation",
-      params: { orderId: order.id },
+    // Navigate to payment screen with selected payment method
+    router.push({
+      pathname: "/payment",
+      params: { 
+        amount: total.toFixed(2),
+        orderId: order.id,
+        paymentMethod: selectedPayment,
+      },
     });
   };
 

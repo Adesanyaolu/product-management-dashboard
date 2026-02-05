@@ -10,9 +10,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  
+
   const debouncedSearch = useDebounce(searchQuery, 300);
-  
+
   const { data: categories } = useCategories();
   const { data: products, isLoading, error, refetch } = useProducts(
     debouncedSearch,
@@ -52,11 +52,13 @@ export default function HomeScreen() {
         </View>
 
         {/* Category Filters */}
-        <FilterChips
-          categories={categoryNames}
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
+        <View>
+          <FilterChips
+            categories={categoryNames}
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          />
+        </View>
 
         {/* Product Grid */}
         {isLoading ? (

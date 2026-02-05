@@ -27,6 +27,8 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="product/[id]" options={{ presentation: "modal" }} />
           <Stack.Screen name="checkout" />
+          <Stack.Screen name="payment" />
+          <Stack.Screen name="payment-processing" />
           <Stack.Screen name="order-confirmation" />
         </Stack>
         <StatusBar style="auto" />
