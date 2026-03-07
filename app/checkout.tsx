@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,17 +12,56 @@ import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
-  Pressable,
+  Alert,
+  Linking,
   ScrollView,
   Text,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const WHATSAPP_NUMBER = "2347032532858";
+
+function buildWhatsAppOrderMessage(order: Order) {
+  const itemLines = order.items
+    .map(
+      (item) =>
+        `- ${item.product.name} x${item.quantity} ($${(
+          item.product.price * item.quantity
+        ).toFixed(2)})`
+    )
+    .join("\n");
+
+  const addressLine2 = order.shippingAddress.addressLine2
+    ? `\nAddress 2: ${order.shippingAddress.addressLine2}`
+    : "";
+
+  return [
+    `Hello, I want to place an order (${order.id}).`,
+    "",
+    "Items:",
+    itemLines,
+    "",
+    `Subtotal: $${order.subtotal.toFixed(2)}`,
+    `Tax: $${order.tax.toFixed(2)}`,
+    `Total: $${order.total.toFixed(2)}`,
+    "",
+    "Shipping details:",
+    `Name: ${order.shippingAddress.fullName}`,
+    `Address: ${order.shippingAddress.addressLine1}${addressLine2}`,
+    `City/State: ${order.shippingAddress.city}, ${order.shippingAddress.state}`,
+    `ZIP: ${order.shippingAddress.zipCode}`,
+    `Country: ${order.shippingAddress.country}`,
+    "",
+    "Contact details:",
+    `Phone: ${order.contactInfo.phone}`,
+    `Email: ${order.contactInfo.email}`,
+  ].join("\n");
+}
+
 export default function CheckoutScreen() {
   const { items, total, subtotal, tax, clearCart } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState<"credit_card" | "debit_card" | "paypal">("credit_card");
 
   const {
     control,
@@ -73,23 +111,30 @@ export default function CheckoutScreen() {
       estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
     };
 
-    // Save order to storage
-    await storage.saveOrder(order);
+    try {
+      // Keep orders visible in the app history before opening WhatsApp.
+      await storage.saveOrder(order);
 
-    // Clear cart
-    clearCart();
+      const whatsappMessage = buildWhatsAppOrderMessage(order);
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+        whatsappMessage
+      )}`;
 
-    setIsSubmitting(false);
+      await Linking.openURL(whatsappUrl);
+      clearCart();
 
-    // Navigate to payment screen with selected payment method
-    router.push({
-      pathname: "/payment",
-      params: { 
-        amount: total.toFixed(2),
-        orderId: order.id,
-        paymentMethod: selectedPayment,
-      },
-    });
+      router.replace({
+        pathname: "/order-confirmation",
+        params: { orderId: order.id },
+      });
+    } catch {
+      Alert.alert(
+        "Unable to open WhatsApp",
+        "Please make sure WhatsApp is installed and set a valid WhatsApp number in checkout.tsx."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -297,29 +342,17 @@ export default function CheckoutScreen() {
             )}
           </View>
 
-          {/* Payment Method */}
-          <Text className="text-lg font-semibold text-foreground mb-3">
-            Payment Method
-          </Text>
-
-          <View className="flex-row gap-2 mb-6">
-            {(["credit_card", "debit_card", "paypal"] as const).map((method) => (
-              <Pressable
-                key={method}
-                onPress={() => setSelectedPayment(method)}
-                className="flex-1"
-              >
-                <Badge
-                  variant={selectedPayment === method ? "default" : "outline"}
-                  className="w-full py-3"
-                >
-                  {method === "credit_card" && "Credit Card"}
-                  {method === "debit_card" && "Debit Card"}
-                  {method === "paypal" && "PayPal"}
-                </Badge>
-              </Pressable>
-            ))}
-          </View>
+          <Card className="mb-6">
+            <CardContent className="pt-4">
+              <Text className="text-sm font-semibold text-foreground mb-1">
+                Checkout via WhatsApp
+              </Text>
+              <Text className="text-sm text-muted-foreground">
+                Tapping place order opens WhatsApp with your order details and
+                shipping information prefilled.
+              </Text>
+            </CardContent>
+          </Card>
 
           {/* Submit Button */}
           <Button
@@ -332,7 +365,7 @@ export default function CheckoutScreen() {
               <ActivityIndicator color="white" />
             ) : (
               <Text className="text-primary-foreground text-base font-semibold">
-                Place Order - ${total.toFixed(2)}
+                Place Order on WhatsApp - ${total.toFixed(2)}
               </Text>
             )}
           </Button>
